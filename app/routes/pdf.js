@@ -2,9 +2,15 @@ module.exports = function (app) {
 
   const path = require('path');
 
-  app.get('/pdf', function (req, res) {
+  app.post('/pdf', function (req, res) {
 
-    const fontsPath = path.join(__dirname, '../../fonts'); // Adjust path as needed
+    const body      = req.body.data;
+  
+    return res.send(body);
+
+  
+
+    const fontsPath = path.join(__dirname, '../../fonts');
 
     var fonts = {
       Roboto: {
@@ -29,14 +35,11 @@ module.exports = function (app) {
       // ... (other options if needed)
     };
 
-    // Generate PDF document
     var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
 
-    // Set response headers for PDF download
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=document.pdf');
 
-    // Pipe the PDF document to the response stream
     pdfDoc.pipe(res);
     pdfDoc.end();
 
